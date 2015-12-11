@@ -1,0 +1,87 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-item.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="fic-menu-item.html">
+
+<dom-module id="fic-menu">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            :host::shadow .dropdown-content {
+                border-radius: 3px;
+                border-color: var(--divider-color);
+                border-style: solid;
+                border-width: 1px;
+                @apply(--shadow-none);
+            }
+
+            paper-button {
+                cursor: pointer;
+                @apply(--fic-menu-button);
+            }
+
+            paper-button:hover {
+                opacity: 0.6;
+            }
+
+            paper-menu.dropdown-content {
+                min-width:  273px;
+                @apply(--fic-menu-dropdown);
+            }
+
+            paper-menu fic-menu-item {
+                @apply(--fic-menu-item);
+            }
+
+            paper-menu fic-menu-item iron-icon {
+                margin-right: 8px;
+                @apply(--fic-menu-icon);
+            }
+        </style>
+        <paper-menu-button id="mainMenu" no-animations horizontal-align="right" vertical-offset="{{verticalOffset}}">
+            <paper-button class="dropdown-trigger">
+                <span>Menu</span>
+                <iron-icon icon="menu"></iron-icon>
+            </paper-button>
+            <paper-menu id="mainMenu" class="dropdown-content">
+                <fic-menu-item data-route="destaques">
+                    <iron-icon icon="fic-icons:star"></iron-icon>
+                    <span>Destaques</span>
+                </fic-menu-item>
+                <fic-menu-item data-route="videos">
+                    <iron-icon icon="fic-icons:video"></iron-icon>
+                    <span>Vídeos</span>
+                </fic-menu-item>
+            </paper-menu>
+        </paper-menu-button>
+    </template>
+    <script>
+        (function() {
+            'use strict';
+
+            Polymer({
+                is: 'fic-menu',
+                properties: {
+                    verticalOffset: Number
+                }
+            });
+        })();
+
+    </script>
+</dom-module>

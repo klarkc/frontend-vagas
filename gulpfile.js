@@ -238,7 +238,8 @@ gulp.task('clean', function() {
 });
 
 // Watch files for changes & reload
-gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
+// Removing lint for while see: https://github.com/PolymerElements/polymer-starter-kit/issues/531
+gulp.task('serve', [/*'lint', */'styles', 'elements', 'images'], function() {
   browserSync({
     port: 5000,
     notify: false,
@@ -276,7 +277,7 @@ gulp.task('serve:dist', ['default'], function() {
   browserSync({
     port: 5001,
     notify: false,
-    logPrefix: 'PSK',
+    logPrefix: 'FV',
     snippetOptions: {
       rule: {
         match: '<span id="browser-sync-binding"></span>',
