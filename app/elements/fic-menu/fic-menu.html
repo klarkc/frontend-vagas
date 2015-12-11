@@ -11,7 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
-<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-item.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="fic-menu-item.html">
@@ -59,12 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span>Menu</span>
                 <iron-icon icon="menu"></iron-icon>
             </paper-button>
-            <paper-menu id="mainMenu" class="dropdown-content">
-                <fic-menu-item data-route="destaques">
+            <paper-menu id="mainMenu" class="dropdown-content" attr-for-selected="data-route" selected="[[route]]">
+                <fic-menu-item data-route="destaques" route="{{route}}">
                     <iron-icon icon="fic-icons:star"></iron-icon>
                     <span>Destaques</span>
                 </fic-menu-item>
-                <fic-menu-item data-route="videos">
+                <fic-menu-item data-route="videos" route="{{route}}">
                     <iron-icon icon="fic-icons:video"></iron-icon>
                     <span>Vídeos</span>
                 </fic-menu-item>
@@ -78,7 +77,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Polymer({
                 is: 'fic-menu',
                 properties: {
-                    verticalOffset: Number
+                    verticalOffset: Number,
+                    route: {
+                        type: String,
+                        notify: true
+                    }
                 }
             });
         })();
