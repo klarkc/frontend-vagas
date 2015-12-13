@@ -86,8 +86,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- Main Content -->
             <div class="content">
                 <iron-pages attr-for-selected="data-route" selected="{{route}}">
-                    <section data-route="destaques">
-                        <paper-material elevation="1">Destaques</paper-material>
+                    <section data-route="destaques" class="horizontal layout">
+                        <div class="flex">
+                            <h2>Vídeo em destaque</h2>
+                            <fic-featured></fic-featured>
+                        </div>
+                        <div>
+                            <h2>+ Vídeos</h2>
+                            <fic-videolist></fic-videolist>
+                        </div>
                     </section>
 
                     <section data-route="videos">
