@@ -17,23 +17,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello from <span>{{foo}}</span></div>
+    <div>Hello from Featured</div>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function() {
+      'use strict';
 
-    Polymer({
-      is: 'fic-featured',
+      Polymer({
+        is: 'fic-featured',
 
-      properties: {
-        foo: {
-          type: String,
-          value: 'fic-featured',
-          notify: true
+        properties: {
+          api: {
+            type: Object,
+            observer: '_apiReady'
+          },
+          conf: {
+            type: Object
+          }
+        },
+
+        _apiReady: function() {
+          if (this.api) {
+            // Fetch first channel for the available conf
+            var req = this.api.channels.list({
+              forUsername: this.conf.channel,
+              part: 'invideoPromotion',
+              key: this.conf.apiKey,
+              maxResults: 1
+            });
+            req.execute(this._fetchSections);
+          }
+        },
+        _fetchSections: function(channelsResponse) {
+          var chId = channelsResponse.items[0].id;
+          console.log(this); // TODO: Undefined, ver como não perder a referência
+          var req = this.api.channelSections.list({
+            channelId: chId,
+            part: 'snippet'
+          })
+          req.execute(this._showSection);
+        },
+        _showSection: function(sectionResponse) {
+          console.log(sectionResponse);
         }
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

@@ -15,113 +15,111 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="fic-menu-item">
-    <template strip-whitespace>
+  <template strip-whitespace>
 
-        <style include="paper-material">
-            :host {
-                box-sizing: border-box;
-                min-width: 5.14em;
-                margin: 0 0.29em;
-                background: transparent;
-                outline-width: 0;
-                border-radius: 3px;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                -webkit-user-select: none;
-                user-select: none;
-                cursor: pointer;
-                z-index: 0;
-                padding: 0.7em 0.57em;
-                color: var(--menu-link-color);
-                font-weight: 600;
-                @apply(--fic-menu-item);
-            }
+    <style include="paper-material">
+      :host {
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        outline-width: 0;
+        border-radius: 3px;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+        color: var(--menu-link-color);
+        font-weight: 600;
+        @apply(--fic-menu-item);
+      }
 
-            :host:hover {
-                background: var(--hover-background-color);
-                @apply(--fic-menu-item-hover);
-            }
+      :host:hover {
+        background: var(--hover-background-color);
+        @apply(--fic-menu-item-hover);
+      }
 
-            :host([raised].keyboard-focus) {
-                @apply(--fic-menu-item-raised-keyboard-focus);
-            }
+      :host([raised].keyboard-focus) {
+        @apply(--fic-menu-item-raised-keyboard-focus);
+      }
 
-            :host(:not([raised]).keyboard-focus) {
-                @apply(--fic-menu-item-flat-keyboard-focus);
-            }
+      :host(:not([raised]).keyboard-focus) {
+        @apply(--fic-menu-item-flat-keyboard-focus);
+      }
 
-            :host([disabled]) {
-                background: #eaeaea;
-                color: #a8a8a8;
-                cursor: auto;
-                pointer-events: none;
-                @apply(--fic-menu-item-disabled);
-            }
+      :host([disabled]) {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+        @apply(--fic-menu-item-disabled);
+      }
 
-            paper-ripple {
-                color: var(--fic-menu-item-ink-color);
-            }
+      paper-ripple {
+        color: var(--fic-menu-item-ink-color);
+      }
 
-            :host >::content * {
-                text-transform: inherit;
-            }
-
-        </style>
-        <content></content>
-    </template>
+      :host >::content * {
+        text-transform: inherit;
+      }
+    </style>
+    <content></content>
+  </template>
 </dom-module>
 
 <script>
-    Polymer({
-        is: 'fic-menu-item',
+  Polymer({
+    is: 'fic-menu-item',
 
-        behaviors: [
-            Polymer.PaperButtonBehavior
-        ],
+    behaviors: [
+      Polymer.PaperButtonBehavior
+    ],
 
-        properties: {
-            /**
-             * If true, the button should be styled with a shadow.
-             */
-            raised: {
-                type: Boolean,
-                reflectToAttribute: true,
-                value: false,
-                observer: '_calculateElevation'
-            },
+    properties: {
+      /**
+       * If true, the button should be styled with a shadow.
+       */
+      raised: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
+        observer: '_calculateElevation'
+      },
 
-            dataRoute: String,
-            route: {
-                type: String,
-                notify: true
-            }
-        },
+      dataRoute: String,
+      route: {
+        type: String,
+        notify: true
+      }
+    },
 
-        listeners: {
-            'tap': '_changeRoute'
-        },
+    listeners: {
+      'tap': '_changeRoute'
+    },
 
-        /**
-        Fired when the animation finishes.
-        This is useful if you want to wait until
-        the ripple animation finishes to perform some action.
+    /**
+    Fired when the animation finishes.
+    This is useful if you want to wait until
+    the ripple animation finishes to perform some action.
 
-        @event transitionend
-        @param {{node: Object}} detail Contains the animated node.
-        */
-        _calculateElevation: function() {
-            if (!this.raised) {
-                this._setElevation(0);
-            } else {
-                Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
-            }
-        },
-        /**
-         * Changes the global app.route variable with current dataRoute value
-         */
-        _changeRoute: function() {
-            this.route = this.dataRoute;
-        }
-    });
-
+    @event transitionend
+    @param {{node: Object}} detail Contains the animated node.
+    */
+    _calculateElevation: function() {
+      if (!this.raised) {
+        this._setElevation(0);
+      } else {
+        Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
+      }
+    },
+    /**
+     * Changes the global app.route variable with current dataRoute value
+     */
+    _changeRoute: function() {
+      this.route = this.dataRoute;
+    }
+  });
 </script>

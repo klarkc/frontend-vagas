@@ -16,75 +16,74 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="fic-menu-item.html">
 
 <dom-module id="fic-menu">
-    <template>
-        <style>
-            :host {
-                display: block;
-            }
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
 
-            :host::shadow .dropdown-content {
-                border-radius: 3px;
-                border-color: var(--divider-color);
-                border-style: solid;
-                border-width: 1px;
-                @apply(--shadow-none);
-            }
+      :host::shadow .dropdown-content {
+        border-radius: 3px;
+        border-color: var(--divider-color);
+        border-style: solid;
+        border-width: 1px;
+        @apply(--shadow-none);
+      }
 
-            paper-button {
-                cursor: pointer;
-                @apply(--fic-menu-button);
-            }
+      paper-button {
+        cursor: pointer;
+        @apply(--fic-menu-button);
+      }
 
-            paper-button:hover {
-                opacity: 0.6;
-            }
+      paper-button:hover {
+        opacity: 0.6;
+      }
 
-            paper-menu.dropdown-content {
-                min-width:  273px;
-                @apply(--fic-menu-dropdown);
-            }
+      paper-menu.dropdown-content {
+        min-width: 273px;
+        @apply(--fic-menu-dropdown);
+      }
 
-            paper-menu fic-menu-item {
-                @apply(--fic-menu-item);
-            }
+      paper-menu fic-menu-item {
+        @apply(--fic-menu-item);
+      }
 
-            paper-menu fic-menu-item iron-icon {
-                margin-right: 8px;
-                @apply(--fic-menu-icon);
-            }
-        </style>
-        <paper-menu-button id="mainMenu" no-animations horizontal-align="right" vertical-offset="{{verticalOffset}}">
-            <paper-button class="dropdown-trigger">
-                <span>Menu</span>
-                <iron-icon icon="menu"></iron-icon>
-            </paper-button>
-            <paper-menu id="mainMenu" class="dropdown-content" attr-for-selected="data-route" selected="[[route]]">
-                <fic-menu-item data-route="destaques" route="{{route}}">
-                    <iron-icon icon="fic-icons:star"></iron-icon>
-                    <span>Destaques</span>
-                </fic-menu-item>
-                <fic-menu-item data-route="videos" route="{{route}}">
-                    <iron-icon icon="fic-icons:video"></iron-icon>
-                    <span>Vídeos</span>
-                </fic-menu-item>
-            </paper-menu>
-        </paper-menu-button>
-    </template>
-    <script>
-        (function() {
-            'use strict';
+      paper-menu fic-menu-item iron-icon {
+        margin-right: 8px;
+        @apply(--fic-menu-icon);
+      }
+    </style>
+    <paper-menu-button id="mainMenu" no-animations horizontal-align="right" vertical-offset="{{verticalOffset}}">
+      <paper-button class="dropdown-trigger">
+        <span>Menu</span>
+        <iron-icon icon="menu"></iron-icon>
+      </paper-button>
+      <paper-menu id="mainMenu" class="dropdown-content" attr-for-selected="data-route" selected="[[route]]">
+        <fic-menu-item data-route="destaques" route="{{route}}">
+          <iron-icon icon="fic-icons:star"></iron-icon>
+          <span>Destaques</span>
+        </fic-menu-item>
+        <fic-menu-item data-route="videos" route="{{route}}">
+          <iron-icon icon="fic-icons:video"></iron-icon>
+          <span>Vídeos</span>
+        </fic-menu-item>
+      </paper-menu>
+    </paper-menu-button>
+  </template>
+  <script>
+    (function() {
+      'use strict';
 
-            Polymer({
-                is: 'fic-menu',
-                properties: {
-                    verticalOffset: Number,
-                    route: {
-                        type: String,
-                        notify: true
-                    }
-                }
-            });
-        })();
-
-    </script>
+      Polymer({
+        is: 'fic-menu',
+        properties: {
+          verticalOffset: Number,
+          route: {
+            type: String,
+            notify: true
+          }
+        }
+      });
+    })();
+  </script>
 </dom-module>

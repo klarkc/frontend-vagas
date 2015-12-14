@@ -1,0 +1,7 @@
+{
+    "interactive-linter.javascript": ["jshint"],
+    "linting.prefer": [
+      "JSHint",
+      "JSCS"
+    ]
+}

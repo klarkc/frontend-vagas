@@ -1,0 +1,7 @@
+{
+    "js": {
+        "space_after_anon_function": false,
+        "space_before_conditional": true,
+        "end_with_newline": true
+    }
+}
