@@ -249,7 +249,8 @@ gulp.task('clean', function() {
 
 // Watch files for changes & reload
 // Removing lint for while see: https://github.com/PolymerElements/polymer-starter-kit/issues/531
-gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
+gulp.task('serve', ['lint', 'serve:nocheck']);
+gulp.task('serve:nocheck', ['styles', 'elements', 'images'], function() {
   browserSync({
     port: 5000,
     notify: false,
