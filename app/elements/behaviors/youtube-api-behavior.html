@@ -1,0 +1,29 @@
+<script>
+  FicBehaviors.YoutubeApiBehavior = {
+    properties: {
+      api: {
+        type: Object,
+        value: function() {
+          return null;
+        },
+        observer: '_readyApi'
+      },
+      conf: {
+        type: Object,
+        value: function() {
+          return {
+            apiKey: '',
+            channel: ''
+          };
+        }
+      }
+    },
+    _readyApi: function() {
+      if (this.api) {
+        // Execute callback
+        this.fire('readyApi');
+      }
+    },
+
+  };
+</script>

@@ -9,6 +9,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="../behaviors/youtube-api-behavior.html">
+<link rel="import" href="../behaviors/utility-functions-behavior.html">
 
 <dom-module id="fic-featured">
   <template>
@@ -17,7 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
     </style>
-    <div>Hello from Featured</div>
+    <google-youtube video-id="{{videoId}}"></google-youtube>
+    <paper-material>{{videoDescription}}</paper-material>
   </template>
   <script>
     (function() {
@@ -25,40 +30,118 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       Polymer({
         is: 'fic-featured',
-
         properties: {
-          api: {
-            type: Object,
-            observer: '_apiReady'
+          channelId: String,
+          poolSize: {
+            type: Number,
+            value: 10
           },
-          conf: {
-            type: Object
-          }
+          topicId: String,
+          videoCategoryId: Number,
+          order: {
+            type: String,
+            value: 'viewCount'
+          },
+          videoId: {
+            type: String,
+            value: ''
+          },
+          videoDescription: String
         },
+        behaviors: [
+          FicBehaviors.UtilityFunctionsBehavior,
+          FicBehaviors.YoutubeApiBehavior
+        ],
+        listeners: {
+          'readyApi': '_fetchChannel',
+          'receivedChannel': '_searchVideo',
+          'receivedVideo': '_fetchVideoDetails'
+        },
+        _fetchChannel: function() {
+          if (this.channelId) {
+            // If channelId comes from element property
+            this.fire('receivedChannel', this.channelId);
+            return;
+          }
 
-        _apiReady: function() {
-          if (this.api) {
-            // Fetch first channel for the available conf
-            var req = this.api.channels.list({
-              forUsername: this.conf.channel,
-              part: 'invideoPromotion',
-              key: this.conf.apiKey,
-              maxResults: 1
+          console.log('fic-featured API Ready');
+
+          // Fetch first channel for the available conf
+          var req = this.api.channels.list({
+            forUsername: this.conf.channel,
+            part: 'invideoPromotion',
+            key: this.conf.apiKey,
+            maxResults: 1
+          });
+
+          // Execute
+          var t = this;
+          req.execute(function(res) {
+            t.fire('receivedChannel', res.items[0].id);
+          });
+        },
+        _searchVideo: function(event) {
+          if (this.videoId) {
+            // If videoId comes from element property
+            this.fire('receivedVideo', {
+              id: this.videoId
             });
-            req.execute(this._fetchSections);
+            return;
           }
+
+          var chId = event.detail;
+
+          // Build params from element properties
+          var t = this;
+          var params = Object.keys(this.properties);
+          params = params.reduce(function(prev, cur) {
+            if (t[cur]) {
+              prev[cur] = t[cur];
+            }
+            return prev;
+          }, {});
+
+          // Add needed parameters
+          params.part = 'snippet';
+          params.channelId = chId;
+          params.key = this.conf.apiKey;
+          params.maxResults = this.poolSize;
+
+          // Execute
+          var req = this.api.search.list(params);
+          req.execute(function(res) {
+            // Shuffle pool list and use the first one
+            res = t.shuffle(res.items)[0];
+
+            t.videoId = res.id;
+            t.fire('receivedVideo', res);
+          });
         },
-        _fetchSections: function(channelsResponse) {
-          var chId = channelsResponse.items[0].id;
-          console.log(this); // TODO: Undefined, ver como não perder a referência
-          var req = this.api.channelSections.list({
-            channelId: chId,
-            part: 'snippet'
-          })
-          req.execute(this._showSection);
-        },
-        _showSection: function(sectionResponse) {
-          console.log(sectionResponse);
+        _fetchVideoDetails: function(event) {
+          if (this.videoDescription) {
+            // If videoDescription comes from element property
+            this.fire('receivedVideoDetails', {
+              videoDescription: this.videoId
+            });
+            return;
+          }
+
+          // Build params
+          var params = {
+            part: 'snippet',
+            id: event.detail.id.videoId,
+            key: this.conf.apiKey,
+            maxResults: 1
+          };
+
+          // Execute
+          var req = this.api.videos.list(params);
+          var t = this;
+          req.execute(function(res) {
+            res = res.items[0];
+            t.videoDescription = res.snippet.description;
+            t.fire('receivedVideoDetails', res);
+          });
         }
       });
     })();
