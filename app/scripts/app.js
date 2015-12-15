@@ -54,7 +54,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   };
 
-
   // Youtube API
   app.ytApi = null;
   app.ytConf = {
