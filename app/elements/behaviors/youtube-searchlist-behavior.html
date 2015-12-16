@@ -1,0 +1,37 @@
+<script>
+  FicBehaviors.YoutubeSearchlistBehavior = {
+    properties: {
+      params: {
+        type: String,
+        value: function() {
+          return {
+            part: 'snippet',
+            relatedToVideoId: String,
+            channelId: String,
+            channelType: String,
+            eventType: String,
+            maxResults: Number,
+            order: 'relevance',
+            pageToken: String,
+            publishedAfter: String,
+            publishedBefore: String,
+            q: String,
+            regionCode: String,
+            safeSearch: 'none',
+            topicId: String,
+            type: 'video',
+            videoCaption: String,
+            videoCategoryId: String,
+            videoDefinition: String,
+            videoDimension: String,
+            videoDuration: 'any',
+            videoEmbeddable: String,
+            videoLicense: String,
+            videoSyndicated: String,
+            videoType: String
+          };
+        }
+      }
+    }
+  };
+</script>
