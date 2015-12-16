@@ -1,0 +1,95 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../behaviors/youtube-api-behavior.html">
+<link rel="import" href="../behaviors/utility-functions-behavior.html">
+
+<dom-module id="fic-list-item">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-horizontal);
+        display: block;
+        padding: 8px;
+      }
+
+      .thumbnail iron-image {
+        height: 95px;
+        width: 170px;
+      }
+
+      .thumbnail span {
+        margin: 76px 4px 8px 130px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 8px;
+        text-align: right;
+        padding: 4px;
+        overflow: hidden;
+      }
+    </style>
+    <div class="thumbnail relative">
+      <iron-image src="{{thumb}}" sizing="cover"></iron-image>
+      <span class="fit self-end">{{length}}</span>
+    </div>
+    <div layout vertical>
+      <h3>{{title}}</h3>
+      <div layout horizontal>
+        <iron-icon icon="fic-icons:viewd"></iron-icon>
+        <span flex>{{views}} views</span>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'fic-list-item',
+
+        properties: {
+          length: String,
+          thumb: String,
+          title: String,
+          views: Number,
+          videoId: {
+            type: String,
+            observer: '_newVideoId'
+          }
+        },
+        behaviors: [
+          FicBehaviors.UtilityFunctionsBehavior,
+          FicBehaviors.YoutubeApiBehavior
+        ],
+        _newVideoId: function() {
+          var req = this.api.videos.list({
+            part: 'snippet, contentDetails, statistics',
+            key: this.conf.apiKey,
+            maxResults: 1,
+            id: this.videoId
+          });
+          var t = this;
+          req.execute(function(res) {
+            res = res.items[0];
+            t.length = t.formatDuration(res.contentDetails.duration);
+            t.thumb = res.snippet.thumbnails.medium.url;
+            t.title = res.snippet.title;
+            t.views = res.statistics.viewCount;
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>

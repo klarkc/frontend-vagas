@@ -19,6 +19,9 @@
       }
 
       return array;
+    },
+    formatDuration: function(str) {
+      return str.replace('PT', '').replace('H', ':').replace('M', ':').replace('S', '');
     }
   };
 </script>

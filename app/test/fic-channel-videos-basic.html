@@ -13,19 +13,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>Elements Test Runner</title>
-  <meta charset="UTF-8">
+  <title>fic-channel-videos</title>
 
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../bower_components/web-component-tester/browser.js"></script>
+  <script src="../../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../bower_components/test-fixture/test-fixture.html">
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../elements/fic-channel-videos/fic-channel-videos.html">
+
 </head>
 
 <body>
 
-  <script>
-    WCT.loadSuites(['menu-card-basic.html', 'ficticia-icons-basic.html', 'fic-menu-basic.html', 'fic-featured-basic.html', 'fic-searchlist-basic.html', 'fic-channel-videos-basic.html', 'fic-list-item-basic.html']);
-  </script>
+  <test-fixture id="basic">
+    <template>
+      <fic-channel-videos></fic-channel-videos>
+    </template>
+  </test-fixture>
 
+  <script>
+    suite('fic-channel-videos tests', function() {
+      var element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('', function() {
+
+      });
+
+    });
+  </script>
 
 </body>
 

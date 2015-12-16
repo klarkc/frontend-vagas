@@ -1,0 +1,101 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="../behaviors/youtube-api-behavior.html">
+<link rel="import" href="../behaviors/youtube-searchlist-behavior.html">
+<link rel="import" href="../behaviors/utility-functions-behavior.html">
+<link rel="import" href="../fic-list-item/fic-list-item.html">
+
+<dom-module id="fic-channel-videos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <template is="dom-repeat" items="{{videos}}">
+      <fic-list-item api="{{api}}" conf="{{conf}}" video-id="{{item.id.videoId}}"></fic-list-item>
+    </template>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'fic-channel-videos',
+        properties: {
+          channelId: String,
+          poolSize: {
+            type: Number,
+            value: 10
+          },
+          order: {
+            type: String,
+            value: 'viewCount'
+          },
+          shuffle: {
+            type: Boolean,
+            value: false
+          },
+          videos: Array
+        },
+        behaviors: [
+          FicBehaviors.UtilityFunctionsBehavior,
+          FicBehaviors.YoutubeApiBehavior
+        ],
+        listeners: {
+          'readyApi': '_fetchChannel',
+          'receivedChannel': '_fetchVideos'
+        },
+        _fetchChannel: function() {
+          console.log('fic-channel-videos API Ready');
+          if (this.channelId) {
+            // If channelId comes from element property
+            this.fire('receivedChannel', this.channelId);
+            return;
+          }
+
+          // Fetch first channel for the available conf
+          var req = this.api.channels.list({
+            forUsername: this.conf.channel,
+            part: 'invideoPromotion',
+            key: this.conf.apiKey,
+            maxResults: 1
+          });
+
+          // Execute
+          var t = this;
+          req.execute(function(res) {
+            t.fire('receivedChannel', res.items[0].id);
+          });
+        },
+        _fetchVideos: function(event) {
+          var params = {
+            key: this.conf.apiKey,
+            part: 'id',
+            channelId: event.detail,
+            maxResults: this.poolSize,
+            order: this.order
+          };
+          var req = this.api.search.list(params);
+
+          var t = this;
+          req.execute(function(res) {
+            t.fire('receivedVideos', res.items);
+            t.videos = res.items;
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>
