@@ -9,7 +9,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flexbox-layout/iron-flexbox-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="../behaviors/youtube-api-behavior.html">
 <link rel="import" href="../behaviors/utility-functions-behavior.html">
@@ -20,9 +23,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
+
+      paper-material,
+      paper-card {
+        margin: 14px 0;
+      }
+
+      paper-card p {
+        margin: 14px 0;
+        padding-top: 0;
+      }
+
+      paper-card .title {
+        @apply(--fic-featured-title);
+      }
     </style>
-    <google-youtube video-id="{{videoId}}"></google-youtube>
-    <paper-material>{{videoDescription}}</paper-material>
+    <paper-material>
+      <google-youtube video-id="{{videoId}}" fluid></google-youtube>
+    </paper-material>
+    <paper-card>
+      <div class="card-content">
+        <div class="title layout horizontal">
+          <div class="text flex">{{videoTitle}}</div>
+          <div class="icons layout horizontal center">
+            <iron-icon icon="fic-icons:view"></iron-icon>
+            <iron-icon icon="fic-icons:star"></iron-icon>
+          </div>
+        </div>
+        <p>{{videoDescription}}</p>
+      </div>
+    </paper-card>
   </template>
   <script>
     (function() {
@@ -46,7 +76,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: ''
           },
-          videoDescription: String
+          videoDescription: String,
+          videoTitle: String
         },
         behaviors: [
           FicBehaviors.UtilityFunctionsBehavior,
@@ -118,14 +149,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         },
         _fetchVideoDetails: function(event) {
-          if (this.videoDescription) {
-            // If videoDescription comes from element property
-            this.fire('receivedVideoDetails', {
-              videoDescription: this.videoId
-            });
-            return;
-          }
-
           // Build params
           var params = {
             part: 'snippet',
@@ -139,7 +162,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var t = this;
           req.execute(function(res) {
             res = res.items[0];
+            console.log(res);
             t.videoDescription = res.snippet.description;
+            t.videoTitle = res.snippet.title;
             t.fire('receivedVideoDetails', res);
           });
         }

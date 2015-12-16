@@ -57,11 +57,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --paper-toolbar-height: 56px;
     /* fic-menu */
     --fic-menu-button: {
-      font: 400 16px / 11px Titillium Web;
+      font: 400 16px Titillium Web;
       text-transform: none;
     }
     --fic-menu-item {
-      font: 600 16px / 11px Titillium Web;
+      font: 600 16px Titillium Web;
+    }
+    /* fic-featured */
+    --fic-featured-title: {
+      font: 400 18px / 21px Titillium Web;
+      color: var(--default-primary-color);
     }
   }
   /* Typography */
@@ -79,20 +84,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   h2,
   h3,
   h4 {
-    color: #a8395c;
+    color: var(--default-primary-color);
     font-family: Titillium Web;
+    margin: 14px 0px;
   }
 
   h2 {
     font-size: 36px;
     font-weight: 400;
-    line-height: 11px;
+    line-height: 32px;
   }
 
   h3 {
     font-size: 18px;
     font-weight: 400;
-    line-height: 21px;
   }
   /* General styles */
 
@@ -121,7 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-center);
     text-decoration: none;
     color: var(--menu-link-color);
-    font: 600 16px / 11px Titillium Web;
+    font: 600 16px Titillium Web;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-size: 14px;
@@ -138,6 +143,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   #mainToolbar {
     background-color: var(--background-secondary-color);
     color: var(--text-secondary-color);
+    padding: 0 14px;
   }
 
   .app-logo {
@@ -150,6 +156,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   #content > section .middle {
     @apply(--layout-vertical);
     @apply(--layout-flex);
+  }
+
+  #content .main,
+  #content .related {
+    margin: 14px;
   }
 
   #toast .toast-hide-button {
@@ -176,9 +187,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding-left: 30px;
       padding-right: 30px;
     }
-    iron-pages {
-      padding: 48px 62px;
-    }
     #content {
       @apply(--layout-vertical);
     }
@@ -201,8 +209,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-flex-5);
     }
   }
-
-  924 - 100 560 - x
   /* Material Design Adaptive Breakpoints */
   /*
     Below you'll find CSS media queries based on the breakpoint guidance
