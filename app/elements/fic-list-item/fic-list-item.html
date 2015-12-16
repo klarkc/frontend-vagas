@@ -36,6 +36,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .thumbnail {
         position: relative;
         opacity: 0.6;
+        height: 95px;
+        width: 170px;
+      }
+
+      .thumbnail iron-image {
+        height: 95px;
+        width: 170px;
       }
 
       .thumbnail .length {
@@ -47,14 +54,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
         font-size: 12px;
         line-height: 4px;
-        text-align: right;
         padding: 4px;
+        text-align: center;
         overflow: hidden;
       }
 
-      .thumbnail iron-image {
-        height: 95px;
-        width: 170px;
+      .details {
+        @apply(--layout-vertical);
+        @apply(--layout-justified);
       }
 
       .details h3 {
@@ -67,21 +74,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .details .views {
+        @apply(--layout-horizontal);
+      }
+
+      .details .views span {
+        @apply(--layout-flex);
         margin-left: 6px;
         font: 600 14px Titillium Web;
         color: var(--light-primary-color);
+        white-space: nowrap;
+      }
+
+      @media (min-width: 601px) and (max-width: 768px) {
+        .container {
+          @apply(--layout-vertical);
+          @apply(--layout-center);
+        }
+        h3 {
+          text-align: center;
+        }
       }
     </style>
     <div class="container" on-mouseover="over" on-mouseout="left">
       <div id="thumbnail" class="thumbnail">
-        <iron-image src="{{thumb}}" sizing="cover"></iron-image>
+        <iron-image src="{{thumb}}"></iron-image>
         <span class="length">{{length}}</span>
       </div>
-      <div class="details layout vertical justified">
+      <div class="details">
         <h3>{{title}}</h3>
-        <div class="layout horizontal">
+        <div class="views">
           <iron-icon icon="fic-icons:viewd"></iron-icon>
-          <span class="views flex">{{views}} views</span>
+          <span>{{views}} views</span>
         </div>
       </div>
     </div>
