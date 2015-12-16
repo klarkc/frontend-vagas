@@ -86,7 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   h4 {
     color: var(--default-primary-color);
     font-family: Titillium Web;
-    margin: 14px 0px;
+    margin-top: 14px;
+    margin-bottom: 14px;
   }
 
   h2 {
@@ -106,9 +107,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     height: 100%;
     padding: 16px 0 16px 0;
     width: calc(98.66% - 16px);
-    margin: 16px auto;
+    margin: 14px;
     background: var(--background-primary-color);
     color: var(--default-primary-color);
+  }
+
+  fic-featured {
+    margin: 0 14px;
   }
 
   paper-menu {
@@ -143,7 +148,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   #mainToolbar {
     background-color: var(--background-secondary-color);
     color: var(--text-secondary-color);
-    padding: 0 14px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .app-logo {
@@ -158,9 +164,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-flex);
   }
 
-  #content .main,
-  #content .related {
-    margin: 14px;
+  .main > h2,
+  .related > h2 {
+    margin-left: 14px;
+    margin-right: 14px;
   }
 
   #toast .toast-hide-button {
@@ -173,19 +180,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   @media (max-width: 600px) {
     paper-material {
       --menu-container-display: none;
-      width: calc(97.33% - 32px);
-      padding-left: 16px;
-      padding-right: 16px;
+      width: calc(97.33% - 28px);
+      padding-left: 14px;
+      padding-right: 14px;
     }
   }
   /* Tablet+ */
 
   @media (min-width: 601px) {
     paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-left: 30px;
-      padding-right: 30px;
+      width: calc(97.33% - 28px);
+      margin-bottom: 28px;
+      padding-left: 14px;
+      padding-right: 14px;
     }
     #content {
       @apply(--layout-vertical);

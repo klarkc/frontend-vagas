@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../behaviors/youtube-api-behavior.html">
@@ -18,9 +20,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        @apply(--layout-horizontal);
         display: block;
-        padding: 8px;
+        visibility: hidden;
+      }
+
+      .container {
+        @apply(--layout-horizontal);
+        cursor: pointer;
+      }
+
+      .container > div {
+        margin: 4px;
+      }
+
+      .thumbnail {
+        position: relative;
+        opacity: 0.6;
+      }
+
+      .thumbnail .length {
+        position: absolute;
+        bottom: 8px;
+        right: 4px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 4px;
+        text-align: right;
+        padding: 4px;
+        overflow: hidden;
       }
 
       .thumbnail iron-image {
@@ -28,27 +57,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 170px;
       }
 
-      .thumbnail span {
-        margin: 76px 4px 8px 130px;
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 8px;
-        text-align: right;
-        padding: 4px;
+      .details h3 {
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
         overflow: hidden;
+        cursor: pointer;
+      }
+
+      .details .views {
+        margin-left: 6px;
+        font: 600 14px Titillium Web;
+        color: var(--light-primary-color);
       }
     </style>
-    <div class="thumbnail relative">
-      <iron-image src="{{thumb}}" sizing="cover"></iron-image>
-      <span class="fit self-end">{{length}}</span>
-    </div>
-    <div layout vertical>
-      <h3>{{title}}</h3>
-      <div layout horizontal>
-        <iron-icon icon="fic-icons:viewd"></iron-icon>
-        <span flex>{{views}} views</span>
+    <div class="container" on-mouseover="over" on-mouseout="left">
+      <div id="thumbnail" class="thumbnail">
+        <iron-image src="{{thumb}}" sizing="cover"></iron-image>
+        <span class="length">{{length}}</span>
+      </div>
+      <div class="details layout vertical justified">
+        <h3>{{title}}</h3>
+        <div class="layout horizontal">
+          <iron-icon icon="fic-icons:viewd"></iron-icon>
+          <span class="views flex">{{views}} views</span>
+        </div>
       </div>
     </div>
   </template>
@@ -65,15 +99,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           title: String,
           views: Number,
           videoId: {
-            type: String,
-            observer: '_newVideoId'
+            type: String
+          },
+          animationConfig: {
+            value: function() {
+              return {
+                'entry': {
+                  name: 'scale-up-animation',
+                  node: this
+                }
+              };
+            }
           }
         },
         behaviors: [
           FicBehaviors.UtilityFunctionsBehavior,
-          FicBehaviors.YoutubeApiBehavior
+          FicBehaviors.YoutubeApiBehavior,
+          Polymer.NeonAnimationRunnerBehavior
         ],
-        _newVideoId: function() {
+        ready: function() {
           var req = this.api.videos.list({
             part: 'snippet, contentDetails, statistics',
             key: this.conf.apiKey,
@@ -86,8 +130,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.length = t.formatDuration(res.contentDetails.duration);
             t.thumb = res.snippet.thumbnails.medium.url;
             t.title = res.snippet.title;
-            t.views = res.statistics.viewCount;
+            t.views = numeral(res.statistics.viewCount).format('0a');
+            t.style.visibility = 'visible';
+            t.playAnimation('entry');
           });
+        },
+        over: function() {
+          this.$.thumbnail.style.opacity = '1';
+        },
+        left: function() {
+          this.cancelAnimation();
+          this.$.thumbnail.style.opacity = '0.6';
         }
       });
     })();

@@ -22,6 +22,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
+
+      fic-list-item {
+        margin: 16px 0;
+      }
+
+      fic-list-item:first-child {
+        margin-top: 0;
+      }
+
+      fic-list-item:last-child {
+        margin-bottom: 0;
+      }
     </style>
     <template is="dom-repeat" items="{{videos}}">
       <fic-list-item api="{{api}}" conf="{{conf}}" video-id="{{item.id.videoId}}"></fic-list-item>
@@ -37,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           channelId: String,
           poolSize: {
             type: Number,
-            value: 10
+            value: 4
           },
           order: {
             type: String,
@@ -85,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             part: 'id',
             channelId: event.detail,
             maxResults: this.poolSize,
+            type: 'video',
             order: this.order
           };
           var req = this.api.search.list(params);

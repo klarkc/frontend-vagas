@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-flexbox-layout/iron-flexbox-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
@@ -21,7 +21,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
+        @apply(--layout-vertical);
         display: block;
+        visibility: hidden;
       }
 
       paper-material,
@@ -35,6 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-card .title {
+        cursor: pointer;
         @apply(--fic-featured-title);
       }
     </style>
@@ -137,6 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           params.channelId = chId;
           params.key = this.conf.apiKey;
           params.maxResults = this.poolSize;
+          params.type = 'video';
 
           // Execute
           var req = this.api.search.list(params);
@@ -162,10 +166,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var t = this;
           req.execute(function(res) {
             res = res.items[0];
-            console.log(res);
             t.videoDescription = res.snippet.description;
             t.videoTitle = res.snippet.title;
             t.fire('receivedVideoDetails', res);
+            t.style.visibility = 'visible';
           });
         }
       });

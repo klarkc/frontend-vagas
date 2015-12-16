@@ -20,6 +20,7 @@
     "Platform": true,
     "page": true,
     "app": true,
-    "FicBehaviors": true
+    "FicBehaviors": true,
+    "numeral": true
   }
 }
