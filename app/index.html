@@ -74,38 +74,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-header-panel main id="headerPanelMain">
 
       <!-- Main Toolbar -->
-      <paper-toolbar id="mainToolbar" justify="center">
-        <div class="container">
-          <!-- Application logo -->
-          <div class="app-logo"></div>
+      <paper-toolbar id="mainToolbar">
+        <!-- Application logo -->
+        <div class="app-logo"></div>
 
-          <!-- Toolbar icons -->
-          <paper-icon-button icon="search"></paper-icon-button>
+        <!-- Toolbar icons -->
+        <paper-icon-button icon="search"></paper-icon-button>
 
-          <!-- Menu Content -->
-          <fic-menu vertical-offset="56" route="{{route}}"></fic-menu>
-        </div>
+        <!-- Menu Content -->
+        <fic-menu vertical-offset="56" route="{{route}}"></fic-menu>
       </paper-toolbar>
 
       <!-- Main Content -->
-      <div class="content">
-        <iron-pages attr-for-selected="data-route" selected="{{route}}">
-          <section data-route="destaques" class="horizontal layout">
-            <div class="flex">
+      <iron-pages id="content" attr-for-selected="data-route" selected="{{route}}">
+        <section data-route="destaques">
+          <div class="middle">
+            <div class="main">
               <h2>Vídeo em destaque</h2>
               <fic-featured api="[[youtube]]" conf="[[ytConf]]"></fic-featured>
             </div>
-            <div>
+            <div class="related">
               <h2>+ Vídeos</h2>
               <fic-videolist api="[[youtube]]" conf="[[ytConf]]"></fic-videolist>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section data-route="videos">
+        <section data-route="videos">
+          <div class="middle">
             <paper-material elevation="1">Videos</paper-material>
-          </section>
-        </iron-pages>
-      </div>
+          </div>
+        </section>
+      </iron-pages>
 
     </paper-header-panel>
 
