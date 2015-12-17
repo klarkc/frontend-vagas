@@ -229,7 +229,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (res.nextPageToken) {
               params.pageToken = res.nextPageToken;
               t.nextPage = params;
-
             }
             t.fire('receivedVideos', res.items);
             t.videos = res.items;
@@ -245,13 +244,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$$('#video').pause();
           this.$.videodialog.close();
         },
-        _nextPage() {
+        _nextPage: function() {
           if (!this.nextPage) {
             console.log('no more pages');
             return;
           }
 
-          console.log(this.nextPage.pageToken);
           var req = this.api.search.list(this.nextPage);
 
           var t = this;
