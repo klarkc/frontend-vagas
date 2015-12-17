@@ -21,6 +21,7 @@
     "page": true,
     "app": true,
     "FicBehaviors": true,
-    "numeral": true
+    "numeral": true,
+    "moment": true
   }
 }

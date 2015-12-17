@@ -51,6 +51,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'videos';
     });
 
+    page('/busca', function() {
+      console.log('Runing busca');
+      app.route = 'busca';
+    });
+
     // 404
     page('*', function() {
       app.$.toast.text = 'Não pudemos encontrar a página solicitada: ';

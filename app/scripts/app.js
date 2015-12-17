@@ -74,4 +74,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log('Error loading API', event);
   };
 
+  // Search
+  app.properties.searchString = {
+    type: String,
+    observer: 'doSearch'
+  };
+  app.showSearch = function() {
+    var searchField = app.$.search;
+    if (searchField.style.visibility === 'hidden') {
+      searchField.style.visibility = 'visible';
+      searchField.focus();
+    } else {
+      searchField.style.visibility = 'hidden';
+    }
+  };
+  app.doSearch = function() {
+    app.route = 'busca';
+  };
+
+  app.goHome = function() {
+    app.route = '/';
+  };
+
 })(document);

@@ -24,6 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- Third Party Libraries -->
   <script src="../bower_components/numeral/min/numeral.min.js"></script>
+  <script src="../bower_components/moment/min/moment.min.js"></script>
+  <script src="../bower_components/moment/locale/pt-br.js"></script>
 
   <!-- Chrome for Android theme color -->
   <meta name="theme-color" content="#a8395c">
@@ -79,10 +81,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Main Toolbar -->
       <paper-toolbar id="mainToolbar">
         <!-- Application logo -->
-        <div class="app-logo"></div>
+        <div class="app-logo" on-click="goHome"></div>
 
         <!-- Toolbar icons -->
-        <paper-icon-button icon="search"></paper-icon-button>
+        <input is="iron-input" id="search" bind-value="{{searchString}}" on-blur="showSearch"></input>
+        <paper-icon-button icon="search" on-click="showSearch"></paper-icon-button>
 
         <!-- Menu Content -->
         <fic-menu vertical-offset="56" route="{{route}}"></fic-menu>
@@ -117,8 +120,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <section data-route="busca">
           <div class="middle">
             <div class="main flex">
-              <h2>Buscando por: {{busca}}</h2>
-              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid" query="{{busca}}"></fic-channel-videos>
+              <h2>Buscando por: {{searchString}}</h2>
+              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid" query="{{searchString}}"></fic-channel-videos>
             </div>
           </div>
         </section>

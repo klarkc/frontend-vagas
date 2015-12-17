@@ -74,6 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         -webkit-box-orient: vertical;
         overflow: hidden;
         cursor: pointer;
+        color: var(--default-primary-color);
       }
 
       .details .views {
@@ -125,6 +126,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           title: String,
           views: Number,
           description: String,
+          published: String,
           videoId: {
             type: String
           },
@@ -163,6 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.title = res.snippet.title;
             t.description = res.snippet.description;
             t.views = numeral(res.statistics.viewCount).format('0a');
+            t.published = moment(res.snippet.publishedAt).format('ll');
             t.style.visibility = 'visible';
             t.playAnimation('entry');
           });
@@ -178,7 +181,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.dialogData = {
             videoId: this.videoId,
             title: this.title,
-            description: this.description
+            description: this.description,
+            published: this.published,
+            views: this.views
           };
         }
       });

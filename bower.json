@@ -11,7 +11,9 @@
     "paper-menu": "PolymerElements/paper-menu#4fecb43601",
     "google-youtube": "GoogleWebComponents/google-youtube#~1.1.2",
     "google-apis": "GoogleWebComponents/google-apis#~1.1.3",
-    "numeral": "adamwdraper/Numeral-js#~1.5.3"
+    "numeral": "adamwdraper/Numeral-js#~1.5.3",
+    "iron-input": "PolymerElements/iron-input#~1.0.7",
+    "moment": "~2.10.6"
   },
   "devDependencies": {
     "web-component-tester": "*"

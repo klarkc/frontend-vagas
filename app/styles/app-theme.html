@@ -37,6 +37,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --divider-color: #c8c8c8;
     --middle-fixed-size: 960px;
     /* Components */
+    /* more-button */
+    --more-button: {
+      border-radius: 4px;
+      font: 700 9px Lato;
+      width: 100%;
+      max-width: 363px;
+      color: var(--menu-link-color);
+    }
     /* paper-drawer-panel */
     --drawer-menu-color: var(--text-primary-color);
     --drawer-border-color: 1px solid #ccc;
@@ -163,6 +171,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: url(../images/32-PX---LOGO.png) no-repeat;
     width: 168px;
     height: 32px;
+    cursor: pointer;
+  }
+
+  #search {
+    visibility: hidden;
+    width: 288px;
+    height: 36px;
+    border-radius: 4px;
+    background-color: #9b2f51;
+    color: #ffffff;
+    font: 300 14px / 31px Lato;
+    margin-right: -48px;
   }
 
   #content > section .middle {

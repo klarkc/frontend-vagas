@@ -39,6 +39,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host::shadow #grid {
         @apply(--layout-horizontal);
         @apply(--layout-wrap);
+        margin-left: 14px;
+        margin-right: 14px;
       }
 
       :host::shadow #grid fic-list-item {
@@ -52,6 +54,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         :host::shadow #list fic-list-item h3 {
           text-align: center;
+        }
+      }
+
+      @media (min-width: 601px) {
+        :host #list {
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 480px;
         }
       }
 
@@ -85,6 +95,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host::shadow #videodialog paper-material {
         @apply(--shadow-none);
       }
+
+      .more paper-button {
+        @apply(--more-button);
+      }
     </style>
     <paper-dialog entry-animation="scale-up-animation" exit-animation="fade-out-animation" id="videodialog" modal="true">
       <div class="dialogicons">
@@ -96,16 +110,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="title layout horizontal">
         <div class="text flex">{{dialogData.title}}</div>
         <div class="icons layout horizontal center">
-          <iron-icon icon="fic-icons:view"></iron-icon>
-          <iron-icon icon="fic-icons:clock"></iron-icon>
+          <iron-icon id="viewsicon" icon="fic-icons:view"></iron-icon>
+          <paper-tooltip for="viewsicon">{{dialogData.views}}</paper-tooltip>
+          <iron-icon id="publishedicon" icon="fic-icons:clock"></iron-icon>
+          <paper-tooltip for="publishedicon">{{dialogData.published}}</paper-tooltip>
         </div>
       </div>
       <div class="description">{{dialogData.description}}</div>
     </paper-dialog>
-    <div id="{{displayLayout}}">
+    <div id="{{displayLayout}}" class="scrollable">
       <template is="dom-repeat" items="{{videos}}">
         <fic-list-item api="{{api}}" conf="{{conf}}" video-id="{{item.id.videoId}}" dialog-data="{{dialogData}}"></fic-list-item>
       </template>
+    </div>
+    <div class="more layout vertical center">
+      <paper-button raised on-click="_nextPage">Carregar Mais Vídeos...</paper-button>
     </div>
   </template>
   <script>
@@ -116,6 +135,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'fic-channel-videos',
         properties: {
           channelId: String,
+          query: {
+            type: String,
+            observer: '_fetchChannel'
+          },
           poolSize: {
             type: Number,
             value: 4
@@ -135,7 +158,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               return {
                 videoId: null,
                 title: null,
-                description: null
+                description: null,
+                published: null,
+                views: null
               };
             },
             observer: '_dialogUpdated'
@@ -143,17 +168,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           displayLayout: {
             type: String,
             value: 'list'
-          }
+          },
+          nextPage: Object
         },
         behaviors: [
           FicBehaviors.UtilityFunctionsBehavior,
-          FicBehaviors.YoutubeApiBehavior
+          FicBehaviors.YoutubeApiBehavior,
+          Polymer.NeonAnimationRunnerBehavior
         ],
         listeners: {
           'readyApi': '_fetchChannel',
-          'receivedChannel': '_fetchVideos'
+          'receivedChannel': '_fetchVideos',
+          'receivedNewPage': '_addNewVideos',
+          'receivedVideos': '_scroll'
         },
         _fetchChannel: function() {
+          if (!this.api) {
+            return;
+          }
           console.log('fic-channel-videos API Ready');
           if (this.channelId) {
             // If channelId comes from element property
@@ -184,10 +216,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: 'video',
             order: this.order
           };
+
+          // Search
+          if (this.query) {
+            params.q = this.query;
+          }
+
           var req = this.api.search.list(params);
 
           var t = this;
           req.execute(function(res) {
+            if (res.nextPageToken) {
+              params.pageToken = res.nextPageToken;
+              t.nextPage = params;
+
+            }
             t.fire('receivedVideos', res.items);
             t.videos = res.items;
           });
@@ -201,6 +244,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _dialogClose: function() {
           this.$$('#video').pause();
           this.$.videodialog.close();
+        },
+        _nextPage() {
+          if (!this.nextPage) {
+            console.log('no more pages');
+            return;
+          }
+
+          console.log(this.nextPage.pageToken);
+          var req = this.api.search.list(this.nextPage);
+
+          var t = this;
+          req.execute(function(res) {
+            if (res.nextPageToken) {
+              console.log('storing page token', res.nextPageToken);
+              t.nextPage.pageToken = res.nextPageToken;
+            } else {
+              console.log('no more pages, nulling nextPage');
+              t.nextPage = null;
+            }
+            t.fire('receivedNewPage', res.items);
+          });
+        },
+        _addNewVideos: function(event) {
+          var t = this;
+          event.detail.forEach(function(item) {
+            t.push('videos', item);
+            t.fire('receivedVideos', t.videos);
+          });
+        },
+        _scroll: function() {
+          var t = this;
+          setTimeout(function() {
+            t.$$('.scrollable').scrollTop = t.$$('.scrollable').scrollHeight;
+          }, 300);
         }
       });
     })();

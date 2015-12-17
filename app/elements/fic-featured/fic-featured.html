@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="../behaviors/youtube-api-behavior.html">
 <link rel="import" href="../behaviors/utility-functions-behavior.html">
@@ -49,8 +50,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="title layout horizontal">
           <div class="text flex">{{videoTitle}}</div>
           <div class="icons layout horizontal">
-            <iron-icon icon="fic-icons:view"></iron-icon>
-            <iron-icon icon="fic-icons:clock"></iron-icon>
+            <iron-icon id="viewsicon" icon="fic-icons:view"></iron-icon>
+            <paper-tooltip for="viewsicon">{{videoViews}}</paper-tooltip>
+            <iron-icon id="publishedicon" icon="fic-icons:clock"></iron-icon>
+            <paper-tooltip for="publishedicon">{{videoPublished}}</paper-tooltip>
           </div>
         </div>
         <p>{{videoDescription}}</p>
@@ -80,7 +83,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: ''
           },
           videoDescription: String,
-          videoTitle: String
+          videoTitle: String,
+          videoViews: String,
+          videoPublished: String
         },
         behaviors: [
           FicBehaviors.UtilityFunctionsBehavior,
@@ -155,7 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _fetchVideoDetails: function(event) {
           // Build params
           var params = {
-            part: 'snippet',
+            part: 'snippet, statistics',
             id: event.detail.id.videoId,
             key: this.conf.apiKey,
             maxResults: 1
@@ -168,6 +173,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             res = res.items[0];
             t.videoDescription = res.snippet.description;
             t.videoTitle = res.snippet.title;
+            t.videoViews = numeral(res.statistics.viewCount).format('0a');
+            t.videoPublished = moment(res.snippet.publishedAt).format('ll');
             t.fire('receivedVideoDetails', res);
             t.style.visibility = 'visible';
           });
