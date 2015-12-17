@@ -13,6 +13,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="../behaviors/youtube-api-behavior.html">
 <link rel="import" href="../behaviors/utility-functions-behavior.html">
 
@@ -85,19 +88,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         white-space: nowrap;
       }
 
-      @media (min-width: 601px) and (max-width: 768px) {
-        .container {
-          @apply(--layout-vertical);
-          @apply(--layout-center);
-        }
-        h3 {
-          text-align: center;
-        }
+      paper-dialog {
+        max-width: 560px;
+      }
+
+      google-youtube {
+        margin-left: 24px;
+        margin-right: 24px;
+        max-width: 464px;
       }
     </style>
-    <div class="container" on-mouseover="over" on-mouseout="left">
+    <div class="container" on-mouseover="over" on-mouseout="left" on-click="openDialog">
       <div id="thumbnail" class="thumbnail">
-        <iron-image src="{{thumb}}"></iron-image>
+        <iron-image src="{{thumb}}" sizing="width"></iron-image>
         <span class="length">{{length}}</span>
       </div>
       <div class="details">
@@ -121,8 +124,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           thumb: String,
           title: String,
           views: Number,
+          description: String,
           videoId: {
             type: String
+          },
+          dialogData: {
+            type: Object,
+            notify: true
           },
           animationConfig: {
             value: function() {
@@ -153,6 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.length = t.formatDuration(res.contentDetails.duration);
             t.thumb = res.snippet.thumbnails.medium.url;
             t.title = res.snippet.title;
+            t.description = res.snippet.description;
             t.views = numeral(res.statistics.viewCount).format('0a');
             t.style.visibility = 'visible';
             t.playAnimation('entry');
@@ -164,6 +173,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         left: function() {
           this.cancelAnimation();
           this.$.thumbnail.style.opacity = '0.6';
+        },
+        openDialog: function() {
+          this.dialogData = {
+            videoId: this.videoId,
+            title: this.title,
+            description: this.description
+          };
         }
       });
     })();

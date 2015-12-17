@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../behaviors/youtube-api-behavior.html">
 <link rel="import" href="../behaviors/youtube-searchlist-behavior.html">
 <link rel="import" href="../behaviors/utility-functions-behavior.html">
@@ -34,10 +35,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       fic-list-item:last-child {
         margin-bottom: 0;
       }
+
+      :host::shadow #grid {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+
+      :host::shadow #grid fic-list-item {
+        width: 290px;
+      }
+
+      @media (min-width: 601px) and (max-width: 768px) {
+        :host::shadow #list fic-list-item .container {
+          @apply(--layout-vertical);
+          @apply(--layout-center);
+        }
+        :host::shadow #list fic-list-item h3 {
+          text-align: center;
+        }
+      }
+
+      paper-dialog {
+        @apply(--layout-vertical);
+        height: 531px;
+        width: 560px;
+      }
+
+      paper-dialog paper-material {
+        margin-top: 14px;
+      }
+
+      paper-dialog .description {
+        overflow-y: auto;
+      }
+
+      paper-dialog .dialogicons {
+        @apply(--layout-self-end);
+        margin-top: 15px;
+      }
+
+      paper-dialog .dialogicons .close {
+        cursor: pointer;
+      }
+
+      paper-dialog .title {
+        @apply(--fic-channel-videos-title);
+      }
+
+      :host::shadow #videodialog paper-material {
+        @apply(--shadow-none);
+      }
     </style>
-    <template is="dom-repeat" items="{{videos}}">
-      <fic-list-item api="{{api}}" conf="{{conf}}" video-id="{{item.id.videoId}}"></fic-list-item>
-    </template>
+    <paper-dialog entry-animation="scale-up-animation" exit-animation="fade-out-animation" id="videodialog" modal="true">
+      <div class="dialogicons">
+        <iron-icon icon="fic-icons:cross" class="close" on-click="_dialogClose"></iron-icon>
+      </div>
+      <paper-material flex>
+        <google-youtube id="video" video-id="{{dialogData.videoId}}" fluid elevation="0"></google-youtube>
+      </paper-material>
+      <div class="title layout horizontal">
+        <div class="text flex">{{dialogData.title}}</div>
+        <div class="icons layout horizontal center">
+          <iron-icon icon="fic-icons:view"></iron-icon>
+          <iron-icon icon="fic-icons:clock"></iron-icon>
+        </div>
+      </div>
+      <div class="description">{{dialogData.description}}</div>
+    </paper-dialog>
+    <div id="{{displayLayout}}">
+      <template is="dom-repeat" items="{{videos}}">
+        <fic-list-item api="{{api}}" conf="{{conf}}" video-id="{{item.id.videoId}}" dialog-data="{{dialogData}}"></fic-list-item>
+      </template>
+    </div>
   </template>
   <script>
     (function() {
@@ -59,7 +128,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Boolean,
             value: false
           },
-          videos: Array
+          videos: Array,
+          dialogData: {
+            type: Object,
+            value: function() {
+              return {
+                videoId: null,
+                title: null,
+                description: null
+              };
+            },
+            observer: '_dialogUpdated'
+          },
+          displayLayout: {
+            type: String,
+            value: 'list'
+          }
         },
         behaviors: [
           FicBehaviors.UtilityFunctionsBehavior,
@@ -80,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // Fetch first channel for the available conf
           var req = this.api.channels.list({
             forUsername: this.conf.channel,
-            part: 'invideoPromotion',
+            part: 'id',
             key: this.conf.apiKey,
             maxResults: 1
           });
@@ -107,6 +191,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.fire('receivedVideos', res.items);
             t.videos = res.items;
           });
+        },
+        _dialogUpdated: function() {
+          if (this.dialogData.videoId) {
+            this.$.videodialog.open();
+            this.$$('#video').play();
+          }
+        },
+        _dialogClose: function() {
+          this.$$('#video').pause();
+          this.$.videodialog.close();
         }
       });
     })();

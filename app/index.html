@@ -107,7 +107,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <section data-route="videos">
           <div class="middle">
-            <paper-material elevation="1">Videos</paper-material>
+            <div class="main flex">
+              <h2>Todos os vídeos do Canal</h2>
+              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid"></fic-channel-videos>
+            </div>
+          </div>
+        </section>
+
+        <section data-route="busca">
+          <div class="middle">
+            <div class="main flex">
+              <h2>Buscando por: {{busca}}</h2>
+              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid" query="{{busca}}"></fic-channel-videos>
+            </div>
           </div>
         </section>
       </iron-pages>
