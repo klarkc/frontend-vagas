@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
   </template>
   <script>
-    (function() {
+    (function () {
       'use strict';
 
       Polymer({
@@ -145,7 +145,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           order: {
             type: String,
-            value: 'viewCount'
+            value: 'viewCount',
+            observer: '_fetchVideos'
           },
           shuffle: {
             type: Boolean,
@@ -154,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           videos: Array,
           dialogData: {
             type: Object,
-            value: function() {
+            value: function () {
               return {
                 videoId: null,
                 title: null,
@@ -182,7 +183,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'receivedNewPage': '_addNewVideos',
           'receivedVideos': '_scroll'
         },
-        _fetchChannel: function() {
+        _fetchChannel: function () {
           if (!this.api) {
             return;
           }
@@ -203,11 +204,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           // Execute
           var t = this;
-          req.execute(function(res) {
+          req.execute(function (res) {
             t.fire('receivedChannel', res.items[0].id);
           });
         },
-        _fetchVideos: function(event) {
+        _fetchVideos: function (event) {
+          // Check if API is ready before go
+          if (!this.api) {
+            return;
+          }
+          console.log(this.order);
           var params = {
             key: this.conf.apiKey,
             part: 'id',
@@ -225,7 +231,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var req = this.api.search.list(params);
 
           var t = this;
-          req.execute(function(res) {
+          req.execute(function (res) {
             if (res.nextPageToken) {
               params.pageToken = res.nextPageToken;
               t.nextPage = params;
@@ -234,17 +240,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.videos = res.items;
           });
         },
-        _dialogUpdated: function() {
+        _dialogUpdated: function () {
           if (this.dialogData.videoId) {
             this.$.videodialog.open();
             this.$$('#video').play();
           }
         },
-        _dialogClose: function() {
+        _dialogClose: function () {
           this.$$('#video').pause();
           this.$.videodialog.close();
         },
-        _nextPage: function() {
+        _nextPage: function () {
           if (!this.nextPage) {
             console.log('no more pages');
             return;
@@ -253,7 +259,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var req = this.api.search.list(this.nextPage);
 
           var t = this;
-          req.execute(function(res) {
+          req.execute(function (res) {
             if (res.nextPageToken) {
               console.log('storing page token', res.nextPageToken);
               t.nextPage.pageToken = res.nextPageToken;
@@ -264,16 +270,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             t.fire('receivedNewPage', res.items);
           });
         },
-        _addNewVideos: function(event) {
+        _addNewVideos: function (event) {
           var t = this;
-          event.detail.forEach(function(item) {
+          event.detail.forEach(function (item) {
             t.push('videos', item);
             t.fire('receivedVideos', t.videos);
           });
         },
-        _scroll: function() {
+        _scroll: function () {
           var t = this;
-          setTimeout(function() {
+          setTimeout(function () {
             t.$$('.scrollable').scrollTop = t.$$('.scrollable').scrollHeight;
           }, 300);
         }

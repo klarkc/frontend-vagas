@@ -112,7 +112,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="middle">
             <div class="main flex">
               <h2>Todos os vídeos do Canal</h2>
-              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid"></fic-channel-videos>
+              <fic-video-sort order="{{video_order}}"></fic-video-sort>
+              <fic-channel-videos api="[[youtube]]" conf="[[ytConf]]" pool-size="12" display-layout="grid" order="[[video_order]]"></fic-channel-videos>
             </div>
           </div>
         </section>
