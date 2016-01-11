@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-dropdown-menu>
   </template>
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         listeners: {
           'iron-select': '_updateOrder'
         },
-        _updateOrder: function (event) {
+        _updateOrder: function(event) {
           console.log(event.detail.item);
         }
       });
