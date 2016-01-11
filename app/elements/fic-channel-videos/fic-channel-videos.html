@@ -146,7 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           order: {
             type: String,
             value: 'viewCount',
-            observer: '_fetchVideos'
+            observer: '_clear'
           },
           shuffle: {
             type: Boolean,
@@ -179,9 +179,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ],
         listeners: {
           'readyApi': '_fetchChannel',
+          'refresh': '_clear',
           'receivedChannel': '_fetchVideos',
           'receivedNewPage': '_addNewVideos',
-          'receivedVideos': '_scroll'
+          'receivedVideos': '_scroll',
+          'receivedOrder': '_refetchVideos'
         },
         _fetchChannel: function() {
           if (!this.api) {
@@ -213,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (!this.api) {
             return;
           }
-          console.log(this.order);
+
           var params = {
             key: this.conf.apiKey,
             part: 'id',
@@ -282,6 +284,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           setTimeout(function() {
             t.$$('.scrollable').scrollTop = t.$$('.scrollable').scrollHeight;
           }, 300);
+        },
+        _clear: function() {
+          // Check api before go
+          if (!this.api) {
+            return;
+          }
+
+          console.log('clearing component');
+
+          // Clear next page
+          this.nextPage = null;
+
+          // Clear videos
+          this.videos = [];
+
+          // Reload component
+          this.fire('readyApi');
         }
       });
     })();

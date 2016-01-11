@@ -9,46 +9,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="fic-video-sort-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
-<dom-module id="fic-video-sort">
+<dom-module id="fic-sort-item">
   <template>
-    <style>
+    <style include="paper-item">
       :host {
         display: block;
       }
     </style>
-    <paper-dropdown-menu label="Ordenar" id="dropdown">
-      <paper-menu class="dropdown-content">
-        <fic-sort-item order="date">Mais recentes</fic-sort-item>
-        <fic-sort-item order="rating">Mais curtidos</fic-sort-item>
-        <fic-sort-item order="title">Ordem alfabética</fic-sort-item>
-        <fic-sort-item order="viewCount">Mais visualizações</fic-sort-item>
-      </paper-menu>
-    </paper-dropdown-menu>
+    <content></content>
   </template>
   <script>
     (function() {
       'use strict';
 
       Polymer({
-        is: 'fic-video-sort',
+        is: 'fic-sort-item',
 
         properties: {
           order: {
             type: String,
-            value: 'date',
             notify: true
-
           }
         },
-        listeners: {
-          'iron-select': '_updateOrder'
-        },
-        _updateOrder: function(event) {
-          this.order = event.detail.item.order;
-        }
+
+        behaviors: [
+          Polymer.PaperItemBehavior
+        ]
       });
     })();
   </script>
