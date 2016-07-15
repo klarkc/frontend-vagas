@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.ytApi = null;
   app.ytConf = {
     channel: 'VAGAStecnologia',
-    apiKey: 'AIzaSyB4FdU8873n_79x8lfvn7INT3R31zjh1sA'
+    apiKey: 'AIzaSyBGd3BHJvZTHAD4WX4BAiQquIhhbytCnfU'
   };
 
   app.ytApiLoaded = function(event) {
